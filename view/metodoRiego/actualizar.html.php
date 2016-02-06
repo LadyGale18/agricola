@@ -10,6 +10,7 @@
     <input type="text" class="hidden" name="id" id="id" value="<?php echo $metodo->id ?>"><br>    
     <?php endforeach; ?>
     <button class="btn btn-default" type="submit">Actualizar</button>
+    <a class="btn btn-default" href="<?php echo $fsConfig->getUrl() ?>index.php/metodoRiego/index">Cancelar</a>
   </form>
 </div>
 <?php include_once $fsConfig->getPath() . 'view/partial/foot.php' ?>

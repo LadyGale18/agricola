@@ -7,6 +7,7 @@
     <label>Descripción</label>
     <input type="text" class="form-control" name="descripcion" id="descripcion"placeholder="Metodo de riego"><br>
     <button type="submit" class="btn btn-default">Registrar</button>
+    <a class="btn btn-default" href="<?php echo $fsConfig->getUrl() ?>index.php/metodoRiego/index">Cancelar</a>
   </form>
 </div>
 <?php include_once $fsConfig->getPath() . 'view/partial/foot.php' ?>
