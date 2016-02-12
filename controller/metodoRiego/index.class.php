@@ -23,7 +23,7 @@ class index extends controller implements action {
     $metodo = new metodoRiegoTable($config);
     $paginacion = new Zebra_Pagination();
     $this->objRespuesta = $metodo->total();    
-    $resultado = 2;
+    $resultado = 5;
     $pagina = ($paginacion->get_page() - 1 ) * $resultado;
 
 

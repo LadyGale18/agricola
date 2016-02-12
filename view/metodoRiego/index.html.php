@@ -2,7 +2,7 @@
 <?php include_once $fsConfig->getPath() . 'libs/Zebra_Pagination.php' ?>
 <?php $pagina = new Zebra_Pagination(); ?>
 <?php $pagina->records($objRespuesta[0]) ?>
-<?php $pagina->records_per_page(2) ?>
+<?php $pagina->records_per_page(5) ?>
 <div class="container container-fluid">
   <h1>Metodo de Riego <small> ver</small></h1>    
   <hr>
