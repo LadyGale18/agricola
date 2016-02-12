@@ -5,7 +5,7 @@
     <title></title>
   </head>
   <body>
-    <br>Hola desde la vista<br>
+    <br>Hola mundo<br>
     <?php echo $mensaje ?>
   </body>
 </html>
