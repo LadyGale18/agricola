@@ -1,7 +1,7 @@
 <?php
 
-require_once '../model/base/cargoBaseTable.class.php';
-require_once '../model/cargoTable.class.php';
+require_once '../model/base/turnoBaseTable.class.php';
+require_once '../model/turnoTable.class.php';
 
 use FStudio\fsController as controller;
 use FStudio\interfaces\fsAction as action;
@@ -9,7 +9,7 @@ use FStudio\interfaces\fsAction as action;
 /**
  * Description of editar.class.php
  *
- * @author Jordan Marles <jordanmarles@hotmail.es>
+ * @author Lina Montaño <linamontaño@hotmail.com>
  * @package FStudio
  * @subpackage controller
  * @subpackage editar.class.php
@@ -22,11 +22,11 @@ class editar extends controller implements action{
     
     $id = filter_input(INPUT_GET, 'id');
     
-    $cargo = new cargoTable($config);
+    $turno = new turnoTable($config);
     
-    $this->objcargo = $cargo->getById($id);
+    $this->objturno = $turno->getById($id);
     
-    $this->defineView('cargo', 'editarView', 'html');
+    $this->defineView('turno', 'editarView', 'html');
         
     
   }

@@ -16,9 +16,9 @@ class turnoTable extends turnoBaseTable {
    * Obtiene todos los datos de la tabla
    * @return [stdClass | boolean]
    */
-  public function getAll() {
+  public function getAll($inicio, $fin) {
     $conn = $this->getConnection($this->config);
-    $sql = 'SELECT tur_id AS id, tur_descripcion AS descripcion, tur_hora_inicio AS hora_inicio, tur_hora_fin AS hora_fin, tur_estado AS estado, tur_created_at AS created_at, tur_updated_at AS updated_at, tur_deleted_at AS deleted_at FROM bda_turno WHERE tur_deleted_at IS NULL ORDER BY tur_created_at ASC';
+    $sql = 'SELECT tur_id AS id, tur_descripcion AS descripcion, tur_hora_inicio AS hora_inicio, tur_hora_fin AS hora_fin, tur_estado AS estado, tur_created_at AS created_at, tur_updated_at AS updated_at, tur_deleted_at AS deleted_at FROM bda_turno WHERE tur_deleted_at IS NULL ORDER BY tur_created_at ASC LIMIT ' . $inicio . ' offset ' . $fin . '';
     $answer = $conn->prepare($sql);
     $answer->execute();
     return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
@@ -31,7 +31,7 @@ class turnoTable extends turnoBaseTable {
    */
   public function getById($id = null) {
     $conn = $this->getConnection($this->config);
-    $sql = 'SELECT tur_id AS id, tur_descripcion AS descripcion, tur_hora_inicio AS hora_inicio, tur_hora_fin AS hora_fin, tur_estado AS estado, tur_created_at AS created_at, tur_updated_at AS updated_at, tur_deleted_at AS deleted_at FROM bda_turno WHERE tur_deleted_at IS NULL AND id = :id';
+    $sql = 'SELECT tur_id AS id, tur_descripcion AS descripcion, tur_hora_inicio AS hora_inicio, tur_hora_fin AS hora_fin, tur_estado AS estado, tur_created_at AS created_at, tur_updated_at AS updated_at, tur_deleted_at AS deleted_at FROM bda_turno WHERE tur_deleted_at IS NULL AND tur_id = :id';
     $params = array(
         ':id' => ($id !== null) ? $id : $this->getId()
     );
@@ -102,6 +102,14 @@ class turnoTable extends turnoBaseTable {
     $answer = $conn->prepare($sql);
     $answer->execute($params);
     return true;
+  }
+
+  public function total() {
+    $conn = $this->getConnection($this->config);
+    $sql = 'Select count(*) from bda_turno where tur_deleted_at IS NULL';
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return $answer->fetch();
   }
 
 }

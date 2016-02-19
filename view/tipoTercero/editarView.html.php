@@ -11,8 +11,8 @@
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
         <a href="<?php echo $fsConfig->getUrl()?>index.php/tipoTercero/index" class="btn btn-warning">Cancelar</a>
-        <button type="submit" class="btn btn-success">Editar</button>
       </div>
     </div>
   </form>

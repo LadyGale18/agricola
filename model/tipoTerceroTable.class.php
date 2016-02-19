@@ -23,6 +23,18 @@ class tipoTerceroTable extends tipoTerceroBaseTable {
     $answer->execute();
     return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
+  
+  public function pager($inicio, $fin) {
+    $conn = $this->getConnection($this->config);
+    $sql = 'SELECT tit_id AS id, tit_descripcion AS descripcion, tit_created_at AS created_at, tit_updated_at AS updated_at, tit_deleted_at AS deleted_at FROM bda_tipo_tercero WHERE tit_deleted_at IS NULL ORDER BY tit_created_at ASC LIMIT :inicio offset :fin';
+    $params = array(
+        ':inicio' => $inicio,
+        ':fin' => $fin
+    );
+    $answer = $conn->prepare($sql);
+    $answer->execute($params);
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
+  }
 
   /**
    * Retorna un elemento de la tabla buscado por un id especifico
@@ -96,6 +108,22 @@ class tipoTerceroTable extends tipoTerceroBaseTable {
     $answer = $conn->prepare($sql);
     $answer->execute($params);
     return true;
+  }
+  
+  public function total() {
+    $conn = $this->getConnection($this->config);
+    $sql = 'Select count(*) from bda_tipo_tercero WHERE tit_deleted_at IS NULL';
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return $answer->fetch();
+  }
+
+  public function filtro($indicio = null) {
+    $conn = $this->getConnection($this->config);
+    $sql = "SELECT tit_id AS id, tit_descripcion AS descripcion, tit_created_at AS created_at, tit_updated_at AS updated_at, tit_deleted_at AS deleted_at FROM bda_tipo_tercero WHERE tit_descripcion LIKE '%" . $indicio . "%' AND  tit_deleted_at IS NULL limit 2";
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
 
 }

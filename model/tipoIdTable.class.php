@@ -23,7 +23,19 @@ class tipoIdTable extends tipoIdBaseTable {
     $answer->execute();
     return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
-
+  
+  public function pager($inicio, $fin) {
+    $conn = $this->getConnection($this->config);
+    $sql = 'SELECT tpi_id AS id, tpi_descripcion AS descripcion, tpi_created_at AS created_at, tpi_updated_at AS updated_at, tpi_deleted_at AS deleted_at FROM bda_tipo_id WHERE tpi_deleted_at IS NULL ORDER BY tpi_created_at ASC LIMIT :inicio offset :fin';
+    $params = array(
+        ':inicio' => $inicio,
+        ':fin' => $fin
+    );
+    $answer = $conn->prepare($sql);
+    $answer->execute($params);
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
+  }
+  
   /**
    * Retorna un elemento de la tabla buscado por un id especifico
    * @param integer $id
@@ -96,6 +108,22 @@ class tipoIdTable extends tipoIdBaseTable {
     $answer = $conn->prepare($sql);
     $answer->execute($params);
     return true;
+  }
+  
+  public function total() {
+    $conn = $this->getConnection($this->config);
+    $sql = 'Select count(*) from bda_tipo_id WHERE tpi_deleted_at IS NULL';
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return $answer->fetch();
+  }
+
+  public function filtro($indicio = null) {
+    $conn = $this->getConnection($this->config);
+    $sql = "SELECT tpi_id AS id, tpi_descripcion AS descripcion, tpi_created_at AS created_at, tpi_updated_at AS updated_at, tpi_deleted_at AS deleted_at FROM bda_tipo_id WHERE tpi_descripcion LIKE '%" . $indicio . "%' AND  tpi_deleted_at IS NULL limit 2";
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
 
 }

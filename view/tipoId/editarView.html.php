@@ -11,8 +11,8 @@
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <a href="<?php echo $fsConfig->getUrl()?>index.php/tipoId/index" class="btn btn-warning">Cancelar</a>
-        <button type="submit" class="btn btn-default">Editar</button>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <a href="<?php echo $fsConfig->getUrl() ?>index.php/tipoId/index" class="btn btn-warning">Cancelar</a>
       </div>
     </div>
   </form>

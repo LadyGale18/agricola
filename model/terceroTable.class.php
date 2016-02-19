@@ -11,16 +11,28 @@ use FStudio\model\base\terceroBaseTable;
  * @version 1.0.0
  */
 class terceroTable extends terceroBaseTable {
-
-  /**
-   * Obtiene todos los datos de la tabla
-   * @return mixed [stdClass | boolean]
-   */
+  
   public function getAll() {
     $conn = $this->getConnection($this->config);
     $sql = 'SELECT ter_id AS id, ter_nombre AS nombre, ter_apellido AS apellido, ter_telefono AS telefono, ter_direccion AS direccion, ter_correo AS correo, car_id AS cargo_id, tpi_id AS tipo_id, tit_id AS tipo_tercero_id, ter_created_at AS created_at, ter_updated_at AS updated_at, ter_deleted_at AS deleted_at FROM bda_tercero WHERE ter_deleted_at IS NULL ORDER BY ter_created_at ASC';
     $answer = $conn->prepare($sql);
     $answer->execute();
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
+  }
+
+  /**
+   * Obtiene todos los datos de la tabla
+   * @return mixed [stdClass | boolean]
+   */
+  public function pager($inicio, $fin) {
+    $conn = $this->getConnection($this->config);
+    $sql = 'SELECT ter_id AS id, ter_nombre AS nombre, ter_apellido AS apellido, ter_telefono AS telefono, ter_direccion AS direccion, ter_correo AS correo, car_id AS cargo_id, tpi_id AS tipo_id, tit_id AS tipo_tercero_id, ter_created_at AS created_at, ter_updated_at AS updated_at, ter_deleted_at AS deleted_at FROM bda_tercero WHERE ter_deleted_at IS NULL ORDER BY ter_created_at ASC LIMIT :inicio offset :fin';
+    $params = array(
+        ':inicio' => $inicio,
+        ':fin' => $fin
+    );
+    $answer = $conn->prepare($sql);
+    $answer->execute($params);
     return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
 
@@ -32,7 +44,7 @@ class terceroTable extends terceroBaseTable {
   public function getById($id = null) {
     $conn = $this->getConnection($this->config);
     $sql = 'SELECT ter_id AS id, ter_nombre AS nombre, ter_apellido AS apellido, ter_telefono AS telefono, ter_direccion AS direccion, ter_correo AS correo, car_id AS cargo_id, tpi_id AS tipo_id, tit_id AS tipo_tercero_id, ter_created_at AS created_at, ter_updated_at AS updated_at, ter_deleted_at AS deleted_at FROM bda_tercero WHERE ter_deleted_at IS NULL AND ter_id = :id';
-    $params = array(        
+    $params = array(
         ':id' => ($id !== null) ? $id : $this->getId()
     );
     $answer = $conn->prepare($sql);
@@ -111,6 +123,22 @@ class terceroTable extends terceroBaseTable {
     $answer = $conn->prepare($sql);
     $answer->execute($params);
     return true;
+  }
+
+  public function total() {
+    $conn = $this->getConnection($this->config);
+    $sql = 'Select count(*) from bda_tercero WHERE ter_deleted_at IS NULL';
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return $answer->fetch();
+  }
+
+  public function filtro($indicio = null) {
+    $conn = $this->getConnection($this->config);
+    $sql = "SELECT ter_id AS id, ter_nombre AS nombre, ter_apellido AS apellido, ter_telefono AS telefono, ter_direccion AS direccion, ter_correo AS correo, car_id AS cargo_id, tpi_id AS tipo_id, tit_id AS tipo_tercero_id, ter_created_at AS created_at, ter_updated_at AS updated_at, ter_deleted_at AS deleted_at FROM bda_tercero WHERE ter_nombre LIKE '%" . $indicio . "%' AND  ter_deleted_at IS NULL limit 2";
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
 
 }

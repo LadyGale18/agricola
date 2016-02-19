@@ -24,6 +24,18 @@ class cargoTable extends cargoBaseTable {
     return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
 
+  public function pager($inicio, $fin) {
+    $conn = $this->getConnection($this->config);
+    $sql = 'SELECT car_id AS id, car_descripcion AS descripcion, car_created_at AS created_at, car_updated_at AS updated_at, car_deleted_at AS deleted_at FROM bda_cargo WHERE car_deleted_at IS NULL ORDER BY car_created_at ASC LIMIT :inicio offset :fin';
+    $params = array(
+        ':inicio' => $inicio,
+        ':fin' => $fin
+    );
+    $answer = $conn->prepare($sql);
+    $answer->execute($params);
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
+  }
+
   /**
    * Retorna un elemento de la tabla buscado por un id especifico
    * @param integer $id
@@ -100,6 +112,22 @@ class cargoTable extends cargoBaseTable {
     $answer = $conn->prepare($sql);
     $answer->execute($params);
     return true;
+  }
+
+  public function total() {
+    $conn = $this->getConnection($this->config);
+    $sql = 'Select count(*) from bda_cargo WHERE car_deleted_at IS NULL';
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return $answer->fetch();
+  }
+
+  public function filtro($indicio = null) {
+    $conn = $this->getConnection($this->config);
+    $sql = "SELECT car_id AS id, car_descripcion AS descripcion, car_created_at AS created_at, car_updated_at AS updated_at, car_deleted_at AS deleted_at FROM bda_cargo WHERE car_descripcion LIKE '%" . $indicio . "%' AND  car_deleted_at IS NULL limit 2";
+    $answer = $conn->prepare($sql);
+    $answer->execute();
+    return ($answer->rowCount() > 0) ? $answer->fetchAll(PDO::FETCH_OBJ) : false;
   }
 
 }
